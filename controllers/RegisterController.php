@@ -4,7 +4,8 @@ include('config/app.php');
 class RegisterController
 {
     private $conn;
-    public $message;
+    private $messages = []; // Array to store messages
+
     public function __construct()
     {
         $db = new DatabaseConnection;
@@ -13,18 +14,28 @@ class RegisterController
 
     public function registration($name, $email, $folder, $added_on)
     {
-        if (empty(trim($name)) || empty(trim($email)) || empty($folder)) {
-            echo  "Fill all the fields";
+        if (empty(trim($name)) && empty(trim($email)) && empty($folder)) {
+            $this->messages[] = "Fill all the fields";
         } else {
+           
             // Name validation
-            if (!preg_match('/^[a-zA-Z\s]+$/', $name)) {
-                echo  "Name can only contain letters and spaces.";
+            if (empty($name)) {
+                $this->messages[] = "Name is required*";
+            } elseif (!preg_match('/^[a-zA-Z\s]+$/', $name)) {
+                $this->messages[] = "Name can only contain letters and spaces.";
             } elseif (strlen($name) > 40) {
-                echo  "Full name exceeds 40 characters.";
-            }
+                $this->messages[] = "Full name exceeds 40 characters.";
+            }else
+             //image validation 
+             if(empty($folder)){
+                $this->messages[]= "Profile image is required*";
+            }else
+
             // Email validation
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo  "Invalid email format";
+            if (empty($email)) {
+                $this->messages[] = "Email is required*";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->messages[] = "Invalid email format";
             } else {
                 // Check if email already exists in the database
                 $sql = "SELECT user_email FROM user WHERE user_email=?";
@@ -35,8 +46,7 @@ class RegisterController
                     $stmt->execute();
                     $result = $stmt->get_result();
                     if ($result->num_rows != 1) {
-
-                        //inserting data to database
+                        // Inserting data to database
                         $sql = "INSERT INTO user (user_name, user_email, user_image, added_on) VALUES(?, ?, ?, ?)";
                         $stmt = $this->conn->prepare($sql);
 
@@ -44,24 +54,29 @@ class RegisterController
                             $stmt->bind_param("ssss", $name, $email, $folder, $added_on);
 
                             if ($stmt->execute()) {
-                                echo "Registration Successfully";
+                                $this->messages[] = "Registration Successfully";
+                                header("location:login.php");
+                                exit(); // Ensure no further code runs after redirect
                             } else {
-                                echo "Error" . $stmt->error;
+                                $this->messages[] = "Error: " . $stmt->error;
                             }
 
                             $stmt->close();
                         } else {
-                            echo "Error preparing querry" . $this->conn->error;
+                            $this->messages[] = "Error preparing query: " . $this->conn->error;
                         }
 
                     } else {
-                        echo  "User with this email is already exist";
+                        $this->messages[] = "User with this email already exists";
                     }
                 }
             }
-
         }
+    }
 
-
+    // Method to get the messages
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

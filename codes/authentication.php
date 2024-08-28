@@ -4,7 +4,7 @@ require_once('config/helper.php');
 include_once('controllers/RegisterController.php');
 include_once('controllers/LoginController.php');
 include_once('controllers/otpverification.php');
-
+include_once('controllers/authenticationController.php');
 
 //registeration
 if (isset($_POST['register_btn'])) {
@@ -25,16 +25,13 @@ if (isset($_POST['register_btn'])) {
     $email = validateInput($db->conn, $_POST['user_email']);
     $added_on = validateInput($db->conn, date('M d, Y'));
 
-
     $register = new RegisterController;
     $register->registration($name, $email, $folder, $added_on);
+    $messages = [];
+    //display message
+    $messages = $register->getMessages();
 
-    if ($register) {
-        header("location:login.php");
-    }
-
-    // Display message
-    echo $register->message;
+   
 }
 
 
@@ -60,7 +57,7 @@ if (isset($_POST['verify_btn'])) {
     session_start();
 
     $my_otp = trim($_POST['my_otp']);
-    $otp = trim((string)$_SESSION['otp']); 
+    $otp = trim((string) $_SESSION['otp']);
 
     if ($otp) {
         $verify = new OTPVerification();
@@ -68,4 +65,9 @@ if (isset($_POST['verify_btn'])) {
     } else {
         echo "OTP session is not set.";
     }
+
 }
+
+
+
+
