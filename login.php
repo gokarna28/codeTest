@@ -23,8 +23,11 @@ include('codes/authentication.php')
     flex-col gap-4 w-2/6 mx-auto mt-10 p-4 rounded-md items-center">
         <h2 class="flex text-2xl font-medium">Login Form</h2>
 
-        <input class="px-4 border border-slate-300 py-2 text-xl rounded-md" type="email" name="email" placeholder="Enter your email">
-        <button class="bg-sky-400 hover:bg-sky-500 px-6 py-2 text-xl rounded-md" type="submit" name="otp_btn">Next</button>
+        <input class="px-4 border border-slate-300 py-2 text-xl rounded-md"
+         type="email" name="email" placeholder="Enter your email">
+         
+        <button class="bg-sky-400 hover:bg-sky-500 px-6 py-2 text-xl rounded-md"
+         type="submit" name="otp_btn">Next</button>
 
         <div>
             Don't have account?

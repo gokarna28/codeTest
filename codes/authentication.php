@@ -31,7 +31,7 @@ if (isset($_POST['register_btn'])) {
     //display message
     $messages = $register->getMessages();
 
-   
+
 }
 
 
@@ -43,12 +43,11 @@ if (isset($_POST['otp_btn'])) {
 
     //store the data in session variable
     $_SESSION['otp'] = $otp;
+    $_SESSION['email'] = $email;
 
     $OTP = new LoginController;
     $OTP->otpmail($email, $otp);
-    if ($OTP) {
-        header("location:otp_verify.php");
-    }
+
 }
 
 
@@ -58,13 +57,15 @@ if (isset($_POST['verify_btn'])) {
 
     $my_otp = trim($_POST['my_otp']);
     $otp = trim((string) $_SESSION['otp']);
+    $email = trim($_SESSION['email']);
 
     if ($otp) {
         $verify = new OTPVerification();
-        $verify->verification($my_otp, $otp);
+        $verify->verification($my_otp, $otp, $email);
     } else {
         echo "OTP session is not set.";
     }
+
 
 }
 

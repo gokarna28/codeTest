@@ -42,6 +42,8 @@ class LoginController
 
                     if ($check) {
                         echo "<script>alert('OTP is sent to your mail. Check the email for further process.')</script>";
+                        header("location:otp_verify.php");
+
                     } else {
                         echo "Failed to send the email";
                     }
