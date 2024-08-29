@@ -41,7 +41,7 @@ class LoginController
                     $check = mail($to, $subject, $message, $headers);
 
                     if ($check) {
-                        echo "successfully otp sent";
+                        echo "<script>alert('OTP is sent to your mail. Check the email for further process.')</script>";
                     } else {
                         echo "Failed to send the email";
                     }

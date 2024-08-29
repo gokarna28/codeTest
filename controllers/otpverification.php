@@ -23,6 +23,9 @@ class OTPVerification
                 //store user_id to session variable
                 $_SESSION['user_id'] = $row['id'];
 
+                //success message
+                echo "<script>alert('You are successfully login to system.');</script>";
+                
                 header("location:user_dashboard.php");
             } else {
                 echo "Invalid OTP. Please try again.";

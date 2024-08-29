@@ -54,9 +54,9 @@ class RegisterController
                             $stmt->bind_param("ssss", $name, $email, $folder, $added_on);
 
                             if ($stmt->execute()) {
-                                $this->messages[] = "Registration Successfully";
+                                echo "<script>alert('Registered Successfully. Now you can login using email.')</script>";
                                 header("location:login.php");
-                                exit(); // Ensure no further code runs after redirect
+                                exit(); 
                             } else {
                                 $this->messages[] = "Error: " . $stmt->error;
                             }
